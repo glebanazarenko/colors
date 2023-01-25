@@ -1,8 +1,8 @@
 <?php
-define('DB_HOST', 'localhost'); //Адрес
-define('DB_USER', 'root'); //Имя пользователя
-define('DB_PASSWORD', ''); //Пароль
-define('DB_NAME', 'gleb'); //Имя БД
+define('DB_HOST', 'std-mysql'); //Адрес
+define('DB_USER', 'std_2006_colorsall'); //Имя пользователя
+define('DB_PASSWORD', '26072003'); //Пароль
+define('DB_NAME', 'std_2006_colorsall'); //Имя БД
 $mysql = mysqli_connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
 
 
@@ -33,7 +33,7 @@ echo'
 echo'
 <table border=1>';
 for($i = 1; $i <= $claster; $i++){
-    $result = mysqli_query($mysql, "SELECT c.r, c.g, c.b FROM cluster as c WHERE c.id = '$i'");
+    $result = mysqli_query($mysql, "SELECT c.r, c.g, c.b FROM centroids as c WHERE c.id = '$i'");
     $Arr = mysqli_fetch_array($result);
     $r = $Arr['r'];
     $g = $Arr['g'];
@@ -47,7 +47,7 @@ for($i = 1; $i <= $claster; $i++){
         </td>';
     
     $mysql->query("DROP TABLE IF EXISTS answer");
-    $mysql->query("CREATE table if not exists answer AS SELECT p.r, p.g, p.b FROM colors_1 AS p, mindists AS m, cluster AS c WHERE p.id = m.pid AND c.id_c = m.cid AND c.id_c = '$i'");
+    $mysql->query("CREATE table if not exists answer AS SELECT p.r, p.g, p.b FROM colors_1 AS p, closest_centre AS m, centroids AS c WHERE p.id = m.color_id AND c.id = m.centroid_id AND c.id = '$i'");
     $mysql->query("ALTER table answer add id int primary key auto_increment;");
     $result = mysqli_query($mysql, "SELECT COUNT(*) AS count FROM answer;");
     $Arr = mysqli_fetch_array($result);
